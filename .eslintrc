@@ -1,0 +1,55 @@
+{
+  "extends": ["airbnb-base", "plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts"]
+      }
+    }
+  },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "node": true,
+    "mocha": true,
+    "es6": true,
+    "jest": true
+  },
+  "rules": {
+    "arrow-body-style": "off",
+    "arrow-parens": ["error", "always"],
+    "global-require": "off",
+    "import/no-cycle": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/prefer-default-export": "off",
+    "linebreak-style": "off",
+    "max-len": ["warn", { "code": 150 }],
+    "no-multiple-empty-lines": ["warn", { "max": 1 }],
+    "no-restricted-syntax": "off",
+    "no-underscore-dangle": "off",
+    "no-unused-vars": "warn",
+    "semi": "off",
+    "no-debugger": "off",
+    "space-before-function-paren": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+# Systek Social Lunch Bot
+
+## How to spin up in development
+
+This application relies on both the backend service and mongodb instance running. You therefore need Docker to spin up both containers. [Click here to install Docker Desktop]("https://docs.docker.com/desktop/") if you haven't already.
+
+### Running the application locally
+
+1. In the project root folder, run:
+   `docker-compose -f docker-compose.dev.yml up`.
+2. Find the application running at localhost:4000
+
+Make sure that you don't have conficting services running on the same ports.
+
+### Setting up the development environment
+
+In order for VS Code or other editors to run linting or misc code helpers correctly, you my need to install the npm modules.
+
+To install npm modules:
+
+1. In the projects local folder, run: `yarn install`
+2. Find the application running at localhost:4000
+
+### Tunneling your local running instance for outside access
+
+(Details to come)

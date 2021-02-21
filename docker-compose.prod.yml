@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  mongodb:
+    container_name: lunchbot-database
+    image: mongo
+  backend:
+    container_name: lunchbot-backend
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile.prod
+    depends_on:
+      - mongodb
+    ports:
+      - '80:80'
+    environment:
+      DATABASE_HOST: mongodb
+      NODE_ENV: production
+      PORT: 80
