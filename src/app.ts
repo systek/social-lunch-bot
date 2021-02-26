@@ -1,13 +1,21 @@
 import express, { Application } from 'express'
+import bodyParser from 'body-parser'
 
 import * as DatabaseService from './services/database'
 import * as SlackService from './services/slack'
 
-import { ReadyState } from './types/dbReadyState'
+import { ReadyState } from './types/database'
 
-import * as MessageControllers from './controllers/message'
+import * as ResponseControllers from './controllers/response'
+import * as AdminControllers from './controllers/admin'
+
+import { Respond } from './types/respond'
 
 const app: Application = express()
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 export const App = async (): Promise<void> => {
   const serverPort = process.env.PORT || 4001
   const secretSlackToken = process.env.SLACK_SECRET_TOKEN
@@ -22,7 +30,7 @@ export const App = async (): Promise<void> => {
   const db = await DatabaseService.initDatabaseConnection()
 
   app.get('/', (req, res) => {
-    res.json({})
+    res.sendStatus(404)
   })
 
   app.get('/health', async (req, res) => {
@@ -37,7 +45,32 @@ export const App = async (): Promise<void> => {
     res.json(healthStatus)
   })
 
-  app.post('/message', MessageControllers.sendLunchInvitation)
+  // Todo: For admin endpoints (during initial dev only?) add passport check of sorts.
+  app.post('/admin/activity', async (req, res) => {
+    const { body } = req
+    const result = await AdminControllers.addActivity(body)
+    res.json(result)
+  })
+
+  // Todo: For admin endpoints (during initial dev only?) add passport check of sorts.
+  app.get('/admin/populate', async (req, res) => {
+    AdminControllers.handleAddUser()
+    res.sendStatus(204)
+  })
+
+  app.post('/respond', async (req, res) => {
+    const { body }: { body: Respond } = req
+
+    const respondResult = await ResponseControllers.handleActivityResponse(body)
+
+    res.json({ success: respondResult.success })
+  })
+
+  app.post('/message', (req, res) => {
+    // MessageControllers.sendLunchInvitation()
+    res.json({ foo: 'ok' })
+  })
+
   app.listen(serverPort, () => {
     console.log(`Started at port ${serverPort}`)
   })

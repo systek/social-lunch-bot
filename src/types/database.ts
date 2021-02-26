@@ -1,5 +1,3 @@
-import { disconnect } from 'process'
-
 export enum ReadyState {
   Disconnected = 0,
   Connected = 1,
