@@ -15,6 +15,13 @@ export interface User {
   createdAt: number
 }
 
+export interface UserInput {
+  slackId: string
+  activities: Activity[]
+  invitations: Invitation[]
+  createdAt: number
+}
+
 const userSchema: Schema<Document<User>> = new Schema({
   id: String,
   slackId: String,

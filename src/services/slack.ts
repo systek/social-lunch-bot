@@ -1,6 +1,8 @@
-import { WebClient } from '@slack/web-api'
+import { WebAPICallResult, WebClient } from '@slack/web-api'
 
 // Initialize
+let slack: WebClient
+
 export const initSlackConnection = (): Promise<WebClient> => {
   const secretSlackToken = process.env.SLACK_SECRET_TOKEN
 
@@ -10,7 +12,8 @@ export const initSlackConnection = (): Promise<WebClient> => {
     )
   }
 
-  const slack = new WebClient(secretSlackToken)
+  slack = new WebClient(secretSlackToken)
+
   return new Promise((resolve, reject) => {
     slack.auth
       .test()
@@ -21,4 +24,9 @@ export const initSlackConnection = (): Promise<WebClient> => {
         reject(error)
       })
   })
+}
+
+export const getStatus = async (): Promise<boolean> => {
+  const slackTestResult: WebAPICallResult = await slack.auth.test()
+  return !!slackTestResult.ok
 }
