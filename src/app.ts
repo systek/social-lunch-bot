@@ -1,5 +1,6 @@
 import express, { Application } from 'express'
 import bodyParser from 'body-parser'
+import bearerToken from 'express-bearer-token'
 
 import * as DatabaseService from './services/database'
 import * as SlackService from './services/slack'
@@ -15,6 +16,8 @@ const app: Application = express()
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+app.use(bearerToken())
 
 export const App = async (): Promise<void> => {
   const serverPort = process.env.PORT || 4001
@@ -47,7 +50,8 @@ export const App = async (): Promise<void> => {
 
   // Todo: For admin endpoints (during initial dev only?) add passport check of sorts.
   app.post('/admin/activity', async (req, res) => {
-    const { body } = req
+    const { body, token } = req
+    console.log(token)
     const result = await AdminControllers.addActivity(body)
     res.json(result)
   })
