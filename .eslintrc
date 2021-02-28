@@ -37,6 +37,7 @@
     "no-underscore-dangle": "off",
     "no-unused-vars": "off",
     "semi": "off",
+    "camel-case": "off",
     "no-debugger": "off",
     "no-console": "off",
     "space-before-function-paren": "off",
