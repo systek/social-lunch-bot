@@ -37,8 +37,9 @@ export const App = async (): Promise<void> => {
   await DatabaseService.initDatabaseConnection()
 
   app.get('/health', CommonRoutes.getHealth)
-  app.post('/admin/activity', authentication, AdminRoutes.postActivity)
+  app.post('/admin/activities', authentication, AdminRoutes.postActivity)
   app.post('/admin/users', authentication, AdminRoutes.postUser)
+  app.post('/admin/invites', authentication, AdminRoutes.postNewInvites)
   app.post('/respond', RespondRoutes.postRespond)
   app.get('*', CommonRoutes.route404)
 

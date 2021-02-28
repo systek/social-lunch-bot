@@ -1,5 +1,5 @@
 import { WebAPICallResult, WebClient } from '@slack/web-api'
-
+import { MessageAttachment } from '@slack/types'
 // Initialize
 let slack: WebClient
 
@@ -24,6 +24,11 @@ export const initSlackConnection = (): Promise<WebClient> => {
         reject(error)
       })
   })
+}
+
+export const getSlackUsers = async (): Promise<any> => {
+  const callResult: WebAPICallResult = await slack.users.list()
+  return callResult.members
 }
 
 export const getStatus = async (): Promise<boolean> => {

@@ -7,14 +7,13 @@ import { Invitation, invitationSchema } from './invitation'
 /** This is the model representing each Slack user along with their
  * activities and invitations
  */
-export interface User {
+export interface User extends Document {
   id: string
   slackId: string
   activities: Activity[]
   invitations: Invitation[]
   createdAt: number
 }
-
 export interface UserInput {
   slackId: string
   activities: Activity[]
@@ -22,7 +21,7 @@ export interface UserInput {
   createdAt: number
 }
 
-const userSchema: Schema<Document<User>> = new Schema({
+const userSchema: Schema<User> = new Schema({
   id: String,
   slackId: String,
   activities: [activitySchema],
@@ -34,4 +33,4 @@ const userSchema: Schema<Document<User>> = new Schema({
 // add the toJSONOverride helper.
 userSchema.set('toJSON', toJSONOverride)
 
-export const User = mongoose.model<Document<User>>('User', userSchema)
+export const User = mongoose.model<User>('User', userSchema)
