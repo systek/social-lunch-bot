@@ -15,6 +15,7 @@ export const postUser = async (req: Request, res: Response): Promise<void> => {
 }
 
 export const postNewInvites = async (req: Request, res: Response): Promise<void> => {
-  InviteControllers.maintainListOfUsers()
+  const newUsers = await InviteControllers.updateRegisteredUsers()
+  console.log(newUsers)
   res.sendStatus(204)
 }
