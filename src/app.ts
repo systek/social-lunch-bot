@@ -39,7 +39,8 @@ export const App = async (): Promise<void> => {
   app.get('/health', CommonRoutes.getHealth)
   app.post('/admin/activities', authentication, AdminRoutes.postActivity)
   app.post('/admin/users', authentication, AdminRoutes.postUser)
-  app.post('/admin/invites', authentication, AdminRoutes.postNewInvites)
+  app.post('/admin/invites/newUsers', authentication, AdminRoutes.postInvitetoNewUsers)
+  app.post('/admin/invites/allUsers', authentication, AdminRoutes.postInviteToAllUsers)
   app.post('/respond', RespondRoutes.postRespond)
   app.get('*', CommonRoutes.route404)
 

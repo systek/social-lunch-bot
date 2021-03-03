@@ -34,3 +34,8 @@ export const bulkAddUsers = async (users: SlackUser[]): Promise<User[]> => {
     throw new Error(error)
   }
 }
+
+export const allUsers = async (): Promise<User[]> => {
+  const users = await User.find()
+  return users
+}

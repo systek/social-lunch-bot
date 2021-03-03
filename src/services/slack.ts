@@ -1,5 +1,8 @@
 import { WebAPICallResult, WebClient } from '@slack/web-api'
 import { MessageAttachment } from '@slack/types'
+
+import { User } from '../models/user'
+
 // Initialize
 let slack: WebClient
 
@@ -34,4 +37,13 @@ export const getSlackUsers = async (): Promise<any> => {
 export const getStatus = async (): Promise<boolean> => {
   const slackTestResult: WebAPICallResult = await slack.auth.test()
   return !!slackTestResult.ok
+}
+
+export const sendMessage = async (blocks: any, user: User) => {
+  console.log('posting')
+  slack.chat.postMessage({
+    channel: user.slackId,
+    text: 'Hello world :tada:',
+    blocks,
+  })
 }

@@ -1,6 +1,8 @@
 import { Request, Response } from 'express'
 import * as AdminControllers from '../controllers/admin'
 import * as InviteControllers from '../controllers/invite'
+import * as UserControllers from '../controllers/users'
+import { ActivityKey } from '../models/activity'
 
 export const postActivity = async (req: Request, res: Response): Promise<void> => {
   const { body } = req
@@ -14,8 +16,14 @@ export const postUser = async (req: Request, res: Response): Promise<void> => {
   res.sendStatus(204)
 }
 
-export const postNewInvites = async (req: Request, res: Response): Promise<void> => {
+export const postInvitetoNewUsers = async (req: Request, res: Response): Promise<void> => {
   const newUsers = await InviteControllers.updateRegisteredUsers()
-  console.log(newUsers)
+  res.sendStatus(204)
+}
+
+export const postInviteToAllUsers = async (req: Request, res: Response): Promise<void> => {
+  const allUsers = await UserControllers.allUsers()
+  await InviteControllers.inviteUsers(allUsers, ActivityKey.SOCIAL_LUNCH)
+
   res.sendStatus(204)
 }

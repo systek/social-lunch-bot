@@ -3,6 +3,8 @@ import { SlackUser } from '../types/slackUser'
 
 import { User } from '../models/user'
 import * as UserControllers from './users'
+import * as MessageController from './message'
+import { ActivityKey } from '../models/activity'
 
 export const updateRegisteredUsers = async (): Promise<User[]> => {
   // 1. Get list of Slack users
@@ -30,4 +32,9 @@ export const updateRegisteredUsers = async (): Promise<User[]> => {
   const deletableIds: string[] = registeredUsers.filter((user) => !verifiedIds.includes(user.id)).map((user) => user.id)
   UserControllers.deleteUsers(deletableIds)
   return newlyAddedUsers
+}
+
+export const inviteUsers = async (users: User[], activityType: ActivityKey): Promise<boolean> => {
+  MessageController.sendJoinInvitation(users, activityType)
+  return true
 }
