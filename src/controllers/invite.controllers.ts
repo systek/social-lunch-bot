@@ -2,13 +2,13 @@ import { v4 as uuid } from 'uuid'
 import * as SlackService from '../services/slack'
 import { SlackUser } from '../types/slackUser'
 
-import { User } from '../models/user'
-import * as UserControllers from './users'
-import * as MessageController from './message'
-import { Activity, ActivityKey } from '../models/activity'
+import { User } from '../models/user.models'
+import * as UserControllers from './users.controllers'
+import * as MessageController from './message.controllers'
+import { Activity, ActivityKey } from '../models/activity.models'
 
-import * as StringHelpers from '../helpers/stringHelpers'
-import { Invitation, InvitationStatus, InvitationType } from '../models/invitation'
+import * as StringHelpers from '../helpers/string.helpers'
+import { Invitation, InvitationStatus, InvitationType } from '../models/invitation.models'
 
 export enum ResponseType {
   ACCEPT = 'ACCEPT',

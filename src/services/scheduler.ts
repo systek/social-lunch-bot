@@ -1,5 +1,5 @@
-import { drawLunchWinners } from '../controllers/draw'
-import { sendLunchInvitation } from '../controllers/message'
+import { drawLunchWinners } from '../controllers/draw.controllers'
+import { sendLunchInvitation } from '../controllers/message.controllers'
 
 const weeklyLunchDraw = async () => {
   const lunchGuests = drawLunchWinners({ drawCount: 5 })

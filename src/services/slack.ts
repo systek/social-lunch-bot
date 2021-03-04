@@ -1,7 +1,7 @@
 import { WebAPICallResult, WebClient } from '@slack/web-api'
 import { MessageAttachment } from '@slack/types'
 
-import { User } from '../models/user'
+import { User } from '../models/user.models'
 
 // Initialize
 let slack: WebClient

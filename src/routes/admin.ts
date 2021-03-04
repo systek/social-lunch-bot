@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
-import * as AdminControllers from '../controllers/admin'
-import * as InviteControllers from '../controllers/invite'
-import * as UserControllers from '../controllers/users'
-import { ActivityKey } from '../models/activity'
+import * as AdminControllers from '../controllers/admin.controllers'
+import * as InviteControllers from '../controllers/invite.controllers'
+import * as UserControllers from '../controllers/users.controllers'
+import { ActivityKey } from '../models/activity.models'
 
 export const postActivity = async (req: Request, res: Response): Promise<void> => {
   const { body } = req

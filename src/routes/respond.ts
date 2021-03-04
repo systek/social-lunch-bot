@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
-import * as RespondControllers from '../controllers/response'
-import * as UserControllers from '../controllers/users'
-import * as MessageControllers from '../controllers/message'
+import * as RespondControllers from '../controllers/respond.controllers'
+import * as UserControllers from '../controllers/users.controllers'
+import * as MessageControllers from '../controllers/message.controllers'
 
 export const postRespond = async (req: Request, res: Response): Promise<void> => {
   const { payload }: { payload: string } = req.body

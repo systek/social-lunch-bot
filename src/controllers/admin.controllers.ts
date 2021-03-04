@@ -1,8 +1,8 @@
 import { Document } from 'mongoose'
 import { v4 as uuid } from 'uuid'
 
-import { Activity, ActivityInput } from '../models/activity'
-import { User, UserInput } from '../models/user'
+import { Activity, ActivityInput } from '../models/activity.models'
+import { User, UserInput } from '../models/user.models'
 
 /** Only used if a new kind of activity is to be added, i a new social initiative
  * such as 'CURLING', 'FRIDAY_BEER', 'POKER_NIGHT' or whatever.

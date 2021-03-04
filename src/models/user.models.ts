@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document } from 'mongoose'
 
-import { Activity, activitySchema } from './activity'
+import { Activity, activitySchema } from './activity.models'
 import { toJSONOverride } from './helpers/toJSON'
-import { Invitation, invitationSchema } from './invitation'
+import { Invitation, invitationSchema } from './invitation.models'
 
 /** This is the model representing each Slack user along with their
  * activities and invitations

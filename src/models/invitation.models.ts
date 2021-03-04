@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
-import { Activity, activitySchema } from './activity'
-import { ActivityEvent, activityEventSchema } from './activityEvent'
+import { Activity, activitySchema } from './activity.models'
+import { ActivityEvent, activityEventSchema } from './activityEvent.models'
 import { toJSONOverride } from './helpers/toJSON'
 
 export enum InvitationStatus {

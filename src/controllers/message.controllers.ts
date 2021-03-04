@@ -2,9 +2,9 @@ import * as SlackService from '../services/slack'
 
 import * as MessageBlocks from '../messageBlocks'
 
-import { Activity, ActivityKey } from '../models/activity'
-import { User } from '../models/user'
-import { Invitation } from '../models/invitation'
+import { Activity, ActivityKey } from '../models/activity.models'
+import { User } from '../models/user.models'
+import { Invitation } from '../models/invitation.models'
 
 interface InvitationOptions {
   user: User

@@ -1,5 +1,5 @@
-import * as InvitationControllers from './invite'
-import { Invitation, InvitationStatus } from '../models/invitation'
+import * as InvitationControllers from './invite.controllers'
+import { Invitation, InvitationStatus } from '../models/invitation.models'
 
 import { RespondAction } from '../types/respond'
 

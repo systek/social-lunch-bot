@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
-import { Invitation } from '../models/invitation'
+import { Invitation } from '../models/invitation.models'
 
-import { User } from '../models/user'
+import { User } from '../models/user.models'
 import { SlackUser } from '../types/slackUser'
 
 export const createUser = async (user: SlackUser): Promise<User> => {

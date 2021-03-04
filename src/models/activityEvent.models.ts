@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose'
 
-import { activitySchema } from './activity'
+import { activitySchema } from './activity.models'
 import { toJSONOverride } from './helpers/toJSON'
 
 export interface ActivityEvent {
