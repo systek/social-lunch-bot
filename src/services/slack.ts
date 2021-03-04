@@ -39,11 +39,17 @@ export const getStatus = async (): Promise<boolean> => {
   return !!slackTestResult.ok
 }
 
-export const sendMessage = async (blocks: any, user: User) => {
-  console.log('posting')
+interface SendMessageOptions {
+  notificationText: string
+  messageBlocks: any
+  user: User
+}
+
+export const sendMessage = async (options: SendMessageOptions): Promise<void> => {
+  const { user, notificationText, messageBlocks } = options
   slack.chat.postMessage({
     channel: user.slackId,
-    text: 'Hello world :tada:',
-    blocks,
+    text: notificationText,
+    blocks: messageBlocks,
   })
 }

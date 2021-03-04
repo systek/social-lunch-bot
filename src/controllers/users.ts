@@ -41,12 +41,18 @@ export const allUsers = async (): Promise<User[]> => {
   return users
 }
 
+export const findUserWithInvitation = async (invitation: Invitation): Promise<User | null> => {
+  const user = await User.findOne({ invitations: { $elemMatch: { id: invitation.id } } })
+  return user
+}
+
 interface AddInvitationToUserOptions {
   user: User
   invitation: Invitation
 }
 export const addInvitationToUser = async (options: AddInvitationToUserOptions): Promise<User> => {
   const { user, invitation } = options
+  //https://mongoosejs.com/docs/deprecations.html#findandmodify
   const updatedUser = await User.findOneAndUpdate({ id: user.id }, { $push: { invitations: invitation } })
   if (updatedUser === null) {
     throw new Error('Could not find user to update')

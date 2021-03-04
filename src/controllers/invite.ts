@@ -10,6 +10,11 @@ import { Activity, ActivityKey } from '../models/activity'
 import * as StringHelpers from '../helpers/stringHelpers'
 import { Invitation, InvitationStatus, InvitationType } from '../models/invitation'
 
+export enum ResponseType {
+  ACCEPT = 'ACCEPT',
+  DECLINE = 'DECLINE',
+}
+
 export const updateRegisteredUsers = async (): Promise<User[]> => {
   // 1. Get list of Slack users
   // 2. Get list of users in DB
@@ -81,4 +86,24 @@ export const inviteUsers = async (users: User[], activityType: ActivityKey): Pro
     }
   })
   return true
+}
+
+export const validateInvitation = async (invitationToken: string): Promise<Invitation | null> => {
+  const invitation = await Invitation.findOne({ token: invitationToken })
+
+  return invitation
+}
+
+interface UpdateInvitationResponseOptions {
+  invitation: Invitation
+  invitationStatus: InvitationStatus
+}
+
+export const updateInvitationResponse = async (options: UpdateInvitationResponseOptions): Promise<Invitation> => {
+  const { invitation, invitationStatus } = options
+
+  invitation.set('status', invitationStatus)
+  await invitation.save()
+
+  return invitation
 }

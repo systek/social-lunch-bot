@@ -1,13 +1,20 @@
-import { Respond, RespondAction } from '../types/respond'
+import * as InvitationControllers from './invite'
+import { Invitation, InvitationStatus } from '../models/invitation'
 
-export const handleInvitationResponse = async (body: RespondAction): Promise<{ success: boolean }> => {
+import { RespondAction } from '../types/respond'
+
+export const handleInvitationResponse = async (body: RespondAction): Promise<Invitation> => {
   const { value, action_id } = body
-  const responseToken = value
-  const responseType = action_id
-  console.log(responseToken, responseType)
-  // TOTO
-  // 1. Register response in DB based on token
-  // 2. Send out confirmation message to user.
-  // 3. Return appropriate success / fail for http response.
-  return { success: true }
+  const invitationToken = value
+  const responseType: InvitationControllers.ResponseType = action_id as InvitationControllers.ResponseType
+  const invitation = await InvitationControllers.validateInvitation(invitationToken)
+
+  if (!invitation) {
+    throw new Error('failed')
+  }
+
+  const updatedInvitationStatus = responseType === InvitationControllers.ResponseType.ACCEPT ? InvitationStatus.ACCEPTED : InvitationStatus.REJECTED
+
+  const updatedInvitation = await InvitationControllers.updateInvitationResponse({ invitation, invitationStatus: updatedInvitationStatus })
+  return updatedInvitation
 }

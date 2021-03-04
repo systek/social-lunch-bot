@@ -4,6 +4,7 @@ import * as MessageBlocks from '../messageBlocks'
 
 import { Activity, ActivityKey } from '../models/activity'
 import { User } from '../models/user'
+import { Invitation } from '../models/invitation'
 
 interface InvitationOptions {
   user: User
@@ -13,10 +14,15 @@ interface InvitationOptions {
 
 export const sendJoinInvitation = async (options: InvitationOptions): Promise<boolean> => {
   const { user, invitationToken, activity } = options
-  const messageBlocks = MessageBlocks.buildInvitationMessage({ invitationToken, activity })
-  SlackService.sendMessage(messageBlocks, user)
+  const { notificationText, messageBlocks } = MessageBlocks.buildInvitationMessage({ invitationToken, activity })
+  SlackService.sendMessage({ notificationText, messageBlocks, user })
 
   return true
+}
+
+export const sendJoinConfirmation = async (invitation: Invitation, user: User): Promise<void> => {
+  const { notificationText, messageBlocks } = MessageBlocks.buildInvitationConfirmatinoMessage()
+  SlackService.sendMessage({ notificationText, messageBlocks, user })
 }
 
 export const sendThisWeeksInvitation = (activityType: ActivityKey) => {}
