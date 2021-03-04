@@ -43,6 +43,7 @@
     "space-before-function-paren": "off",
     "no-use-before-define": "off",
     "no-shadow": "off",
+    "camelcase": "off",
     "@typescript-eslint/no-use-before-define": ["error"],
     "@typescript-eslint/no-shadow": ["error"],
     "@typescript-eslint/no-unused-vars": "warn",

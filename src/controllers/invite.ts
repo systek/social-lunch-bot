@@ -1,10 +1,14 @@
+import { v4 as uuid } from 'uuid'
 import * as SlackService from '../services/slack'
 import { SlackUser } from '../types/slackUser'
 
 import { User } from '../models/user'
 import * as UserControllers from './users'
 import * as MessageController from './message'
-import { ActivityKey } from '../models/activity'
+import { Activity, ActivityKey } from '../models/activity'
+
+import * as StringHelpers from '../helpers/stringHelpers'
+import { Invitation, InvitationStatus, InvitationType } from '../models/invitation'
 
 export const updateRegisteredUsers = async (): Promise<User[]> => {
   // 1. Get list of Slack users
@@ -34,7 +38,47 @@ export const updateRegisteredUsers = async (): Promise<User[]> => {
   return newlyAddedUsers
 }
 
+interface InvitationOptions {
+  user: User
+  invitationToken: string
+  activity: Activity
+  invitationType: InvitationType
+}
+
+const createInvitation = async (options: InvitationOptions): Promise<Invitation> => {
+  const { invitationToken, activity, invitationType } = options
+  const invitation = await Invitation.create({
+    id: uuid(),
+    token: invitationToken,
+    activity,
+    activityEvent: null,
+    type: invitationType,
+    status: InvitationStatus.PENDING,
+    createdAt: Date.now(),
+  })
+  return invitation
+}
+
 export const inviteUsers = async (users: User[], activityType: ActivityKey): Promise<boolean> => {
-  MessageController.sendJoinInvitation(users, activityType)
+  const activity = await Activity.findOne({ type: activityType })
+
+  console.log(activity)
+
+  if (activity === null) {
+    return false
+  }
+
+  users.forEach(async (user) => {
+    try {
+      const invitationToken = StringHelpers.createRandomToken()
+      const invitation = await createInvitation({ user, activity, invitationToken, invitationType: InvitationType.MEMBERSHIP })
+      UserControllers.addInvitationToUser({ user, invitation })
+      MessageController.sendJoinInvitation({ user, invitationToken, activity })
+      console.log('user invited')
+    } catch (error) {
+      console.log(error)
+      // Todo: handle error in Sentry?
+    }
+  })
   return true
 }

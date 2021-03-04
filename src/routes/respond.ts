@@ -1,11 +1,15 @@
 import { Request, Response } from 'express'
-import * as ResponseControllers from '../controllers/response'
-import { Respond } from '../types/respond'
+import * as RespondControllers from '../controllers/response'
 
-export const postRespond = async (req: Request, res: Response) => {
-  const { body }: { body: Respond } = req
+export const postRespond = async (req: Request, res: Response): Promise<void> => {
+  const { payload }: { payload: string } = req.body
 
-  const respondResult = await ResponseControllers.handleActivityResponse(body)
+  const json = JSON.parse(payload)
 
-  res.json({ success: respondResult.success })
+  const { actions } = json
+  if (actions.length > 0) {
+    const action = actions[0]
+    await RespondControllers.handleInvitationResponse(action)
+  }
+  res.json({ success: true })
 }

@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid'
+import { Invitation } from '../models/invitation'
 
 import { User } from '../models/user'
 import { SlackUser } from '../types/slackUser'
@@ -38,4 +39,17 @@ export const bulkAddUsers = async (users: SlackUser[]): Promise<User[]> => {
 export const allUsers = async (): Promise<User[]> => {
   const users = await User.find()
   return users
+}
+
+interface AddInvitationToUserOptions {
+  user: User
+  invitation: Invitation
+}
+export const addInvitationToUser = async (options: AddInvitationToUserOptions): Promise<User> => {
+  const { user, invitation } = options
+  const updatedUser = await User.findOneAndUpdate({ id: user.id }, { $push: { invitations: invitation } })
+  if (updatedUser === null) {
+    throw new Error('Could not find user to update')
+  }
+  return updatedUser
 }

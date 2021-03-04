@@ -2,15 +2,19 @@ import * as SlackService from '../services/slack'
 
 import * as MessageBlocks from '../messageBlocks'
 
-import { ActivityKey } from '../models/activity'
+import { Activity, ActivityKey } from '../models/activity'
 import { User } from '../models/user'
 
-export const sendJoinInvitation = async (users: User[], activityType: ActivityKey): Promise<boolean> => {
-  const messageBlocks = MessageBlocks.buildInvitationMessage(33)
-  console.log(messageBlocks)
-  users.forEach((user) => {
-    SlackService.sendMessage(messageBlocks, user)
-  })
+interface InvitationOptions {
+  user: User
+  invitationToken: string
+  activity: Activity
+}
+
+export const sendJoinInvitation = async (options: InvitationOptions): Promise<boolean> => {
+  const { user, invitationToken, activity } = options
+  const messageBlocks = MessageBlocks.buildInvitationMessage({ invitationToken, activity })
+  SlackService.sendMessage(messageBlocks, user)
 
   return true
 }

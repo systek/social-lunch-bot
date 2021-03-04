@@ -1,5 +1,4 @@
-import { Console } from 'console'
-import mongoose, { Schema } from 'mongoose'
+import mongoose, { Document, Schema } from 'mongoose'
 
 import { Activity, activitySchema } from './activity'
 import { ActivityEvent, activityEventSchema } from './activityEvent'
@@ -11,28 +10,33 @@ export enum InvitationStatus {
   REJECTED = 'REJECTED',
 }
 
-export interface Invitation {
+export enum InvitationType {
+  MEMBERSHIP = 'MEMBERSHIP',
+  EVENT = 'EVENT',
+}
+
+export interface Invitation extends Document {
   id: string
   token: string
-  activity: Activity[]
+  activity: Activity
   activityEvent: ActivityEvent
-  type: any
-  status: any
+  type: InvitationType
+  status: InvitationStatus
   createdAt: number
 }
 
-export const invitationSchema = new Schema({
+export const invitationSchema = new Schema<Invitation>({
   id: String,
   token: String,
-  activity: [activitySchema],
+  activity: activitySchema,
   activityEvent: activityEventSchema,
   type: {
     type: String,
-    enum: [InvitationStatus],
+    enum: InvitationType,
   },
   status: {
     type: String,
-    enum: [InvitationStatus],
+    enum: InvitationStatus,
   },
   createdAt: Number,
 })
@@ -41,4 +45,4 @@ export const invitationSchema = new Schema({
 // add the toJSONOverride helper.
 invitationSchema.set('toJSON', toJSONOverride)
 
-export const Invitation = mongoose.model('Invitation', invitationSchema)
+export const Invitation = mongoose.model<Invitation>('Invitation', invitationSchema)
