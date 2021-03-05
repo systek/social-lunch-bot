@@ -79,7 +79,6 @@ export const inviteUsers = async (users: User[], activityType: ActivityKey): Pro
       const invitation = await createInvitation({ user, activity, invitationToken, invitationType: InvitationType.MEMBERSHIP })
       UserControllers.addInvitationToUser({ user, invitation })
       MessageController.sendJoinInvitation({ user, invitationToken, activity })
-      console.log('user invited')
     } catch (error) {
       console.log(error)
       // Todo: handle error in Sentry?

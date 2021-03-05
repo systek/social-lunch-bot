@@ -22,6 +22,13 @@ export const sendJoinInvitation = async (options: InvitationOptions): Promise<bo
 
 export const sendJoinConfirmation = async (invitation: Invitation, user: User): Promise<void> => {
   const { notificationText, messageBlocks } = MessageBlocks.buildInvitationConfirmatinoMessage()
+  console.log('sendJoinConfirmation')
+  SlackService.sendMessage({ notificationText, messageBlocks, user })
+  // Todo: Withdraw original message?
+}
+
+export const sendRejectConfirmation = async (invitation: Invitation, user: User): Promise<void> => {
+  const { notificationText, messageBlocks } = MessageBlocks.buildInvitationRejectionMessage()
   SlackService.sendMessage({ notificationText, messageBlocks, user })
 }
 

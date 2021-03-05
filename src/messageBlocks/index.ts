@@ -20,8 +20,11 @@ export const buildInvitationMessage = (options: InvitationMessageOptions): Messa
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `Hei! To ganger i uken trekker vi heldige kollegaer som får spise lunsj og
-        møtes på video! Du får tydelig beskjed i forkant. Har du lyst til å være med?`,
+        text: `Hei 👋! To ganger i uken trekker vi kollegaer som får møtes for videolunsj! \n\n
+Slik fungerer det:
+Dersom du blir trukket ut, får du melding om det i god tid i forkant av lunsjen.\n\n
+Du ordner selv med lunsj for ca 200 kroner, feks fra nærmeste bakeri eller levering hjem,
+og så skriver du utlegg til Systek. Har du lyst til å være med i trekningen?`,
       },
     },
     {
@@ -55,8 +58,16 @@ export const buildInvitationMessage = (options: InvitationMessageOptions): Messa
 }
 
 export const buildInvitationConfirmatinoMessage = (): MessageContent => {
-  const notificationText = `Så hyggelig at du blir med! Du får beskjed et par dager i forveien hvis du vinner ukens trekning!
-  Dersom du ikke kan allikevel, vil du få muligheten igjen senere!`
+  const notificationText = `Så hyggelig at du blir med! 🤩 Du får beskjed et par dager i forveien hvis du vinner ukens trekning!
+Dersom du ikke kan denne dagen, vil du få muligheten igjen senere!`
+
+  const messageBlocks = null
+
+  return { messageBlocks, notificationText }
+}
+
+export const buildInvitationRejectionMessage = (): MessageContent => {
+  const notificationText = `Det går fint! 🙂 Vi noterer oss at du ikke ønsker å være med!`
 
   const messageBlocks = null
 
