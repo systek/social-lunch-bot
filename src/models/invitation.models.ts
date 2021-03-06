@@ -1,8 +1,9 @@
 import mongoose, { Document, Schema } from 'mongoose'
 
 import { Activity, activitySchema } from './activity.models'
-import { ActivityEvent, activityEventSchema } from './activityEvent.models'
+import { Event, eventSchema } from './event.models'
 import { toJSONOverride } from './helpers/toJSON'
+import { User } from './user.models'
 
 export enum InvitationStatus {
   PENDING = 'PENDING',
@@ -19,17 +20,18 @@ export interface Invitation extends Document {
   id: string
   token: string
   activity: Activity
-  activityEvent: ActivityEvent
+  event: Event
   type: InvitationType
   status: InvitationStatus
   createdAt: number
+  user: User
 }
 
 export const invitationSchema = new Schema<Invitation>({
   id: String,
   token: String,
   activity: activitySchema,
-  activityEvent: activityEventSchema,
+  event: eventSchema,
   type: {
     type: String,
     enum: InvitationType,
@@ -38,6 +40,7 @@ export const invitationSchema = new Schema<Invitation>({
     type: String,
     enum: InvitationStatus,
   },
+  user: User.schema,
   createdAt: Number,
 })
 

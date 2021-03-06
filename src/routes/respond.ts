@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
-import * as RespondControllers from '../controllers/respond.controllers'
 import * as UserControllers from '../controllers/users.controllers'
+import * as RespondControllers from '../controllers/respond.controllers'
+import * as ActivityControllers from '../controllers/activity.controllers'
 import * as MessageControllers from '../controllers/message.controllers'
 import { InvitationStatus } from '../models/invitation.models'
 
@@ -9,7 +10,6 @@ export const postRespond = async (req: Request, res: Response): Promise<void> =>
   const { payload }: { payload: string } = req.body
   let json = null
 
-  console.log(payload)
   try {
     json = JSON.parse(payload)
   } catch (error) {
@@ -24,18 +24,32 @@ export const postRespond = async (req: Request, res: Response): Promise<void> =>
   }
   const action = actions[0]
   const invitation = await RespondControllers.handleInvitationResponse(action)
-  const user = invitation ? await UserControllers.findUserWithInvitation(invitation) : null
+  const activity = await ActivityControllers.getActivityByType(invitation.activity.type)
 
-  if (!user) {
+  // invitation.user is a sub-document, so we need to get the actual document before
+  // adding the new activity to it.
+  const user = await UserControllers.singleUser(invitation.user.id)
+
+  if (!user || !activity) {
     res.json({ success: false })
     return
   }
 
   if (invitation.status === InvitationStatus.ACCEPTED) {
+    const hasActivityAlready = user.activities.some((existingActivity) => existingActivity.type === activity.type)
+    if (!hasActivityAlready) {
+      user.activities.push(activity)
+    }
+    const updatedUser = await user.save()
+    invitation.user = updatedUser
+    invitation.save()
+
+    console.log('UpdatedUser', user)
     await MessageControllers.sendJoinConfirmation(invitation, user)
   }
 
   if (invitation.status === InvitationStatus.REJECTED) {
+    UserControllers.removeUserFromActivity({ user, activity })
     await MessageControllers.sendRejectConfirmation(invitation, user)
   }
 
