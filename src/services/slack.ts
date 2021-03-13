@@ -47,9 +47,13 @@ interface SendMessageOptions {
 
 export const sendMessage = async (options: SendMessageOptions): Promise<void> => {
   const { user, notificationText, messageBlocks } = options
-  slack.chat.postMessage({
-    channel: user.slackId,
-    text: notificationText,
-    blocks: messageBlocks,
-  })
+  try {
+    slack.chat.postMessage({
+      channel: user.slackId,
+      text: notificationText,
+      blocks: messageBlocks,
+    })
+  } catch (error) {
+    throw new Error(`'Could not send message. Slack returned error: ${error}'`)
+  }
 }
