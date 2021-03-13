@@ -1,38 +1,52 @@
 import * as SlackService from '../services/slack'
 
-import * as MessageBlocks from '../messageBlocks'
+import * as MessageFactory from './messageLibrary'
 
-import { Activity, ActivityKey } from '../models/activity.models'
+import { ActivityType } from '../models/activity.models'
 import { User } from '../models/user.models'
-import { Invitation } from '../models/invitation.models'
+import { Invitation, InvitationType } from '../models/invitation.models'
 
-interface InvitationOptions {
-  user: User
-  invitationToken: string
-  activity: Activity
-}
+export const sendInvitations = async (invitations: Invitation[]): Promise<boolean> => {
+  invitations.forEach((invitation) => {
+    const { user, token, activity, type } = invitation
 
-export const sendJoinInvitation = async (options: InvitationOptions): Promise<boolean> => {
-  const { user, invitationToken, activity } = options
-  const { notificationText, messageBlocks } = MessageBlocks.buildInvitationMessage({ invitationToken, activity })
-  SlackService.sendMessage({ notificationText, messageBlocks, user })
+    const invitationDetails =
+      type === InvitationType.EVENT
+        ? {
+            day: 'Tirsdag',
+            url: invitation.event.url,
+          }
+        : {}
+    const { notificationText, messageBlocks } = MessageFactory.buildInvitationMessage({
+      invitationToken: token,
+      activityType: activity.type,
+      invitationType: invitation.type,
+      invitationDetails,
+    })
+    console.log('invitation', invitation)
+    SlackService.sendMessage({ notificationText, messageBlocks, user })
+  })
 
   return true
 }
 
 export const sendJoinConfirmation = async (invitation: Invitation, user: User): Promise<void> => {
-  const { notificationText, messageBlocks } = MessageBlocks.buildInvitationConfirmatinoMessage()
+  const activityType = invitation.activity.type
+  const invitationType = invitation.type
+  const { notificationText, messageBlocks } = MessageFactory.buildInvitationAcceptMessage({ activityType, invitationType })
   console.log('sendJoinConfirmation')
   SlackService.sendMessage({ notificationText, messageBlocks, user })
-  // Todo: Withdraw original message?
+  // Todo: Withdraw original message
 }
 
 export const sendRejectConfirmation = async (invitation: Invitation, user: User): Promise<void> => {
-  const { notificationText, messageBlocks } = MessageBlocks.buildInvitationRejectionMessage()
+  const activityType = invitation.activity.type
+  const invitationType = invitation.type
+  const { notificationText, messageBlocks } = MessageFactory.buildInvitationRejectMessage({ activityType, invitationType })
   SlackService.sendMessage({ notificationText, messageBlocks, user })
 }
 
-export const sendThisWeeksInvitation = (activityType: ActivityKey) => {}
+export const sendThisWeeksInvitation = (activityType: ActivityType) => {}
 
 export const sendLunchInvitation = (lunchGuests: any[]): Promise<boolean> => {
   // 1. Get pool of participants

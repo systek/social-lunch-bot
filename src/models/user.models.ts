@@ -15,7 +15,6 @@ export interface User extends Document {
 export interface UserInput {
   slackId: string
   activities: Activity[]
-  createdAt: number
 }
 
 export const userSchema: Schema<User> = new Schema({

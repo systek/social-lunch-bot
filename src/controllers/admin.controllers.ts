@@ -13,6 +13,8 @@ export const addActivity = async (activityInput: ActivityInput): Promise<Activit
     ...activityInput,
   })
 
+  console.log(activity)
+
   try {
     await activity.save()
   } catch (err) {
@@ -27,12 +29,11 @@ export const handleAddUser = async (userInput: UserInput): Promise<User> => {
   // - Send appropriate invitations
   // - Add sent invitations to user before send.
 
-  const augmentedUser = {
+  const user: Document<User> = new User({
     id: uuid(),
+    createdAt: Date.now(),
     ...userInput,
-  }
-
-  const user: Document<User> = new User(augmentedUser)
+  })
 
   await user.save()
 

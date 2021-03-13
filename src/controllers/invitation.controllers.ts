@@ -2,11 +2,12 @@ import { v4 as uuid } from 'uuid'
 
 import { User } from '../models/user.models'
 import * as MessageController from './message.controllers'
-import { Activity, ActivityKey } from '../models/activity.models'
+import { Activity, ActivityType } from '../models/activity.models'
 
 import * as StringHelpers from '../helpers/string.helpers'
 import { Invitation, InvitationStatus, InvitationType } from '../models/invitation.models'
 import { Logger } from '../helpers/logging.helpers'
+import { Event } from '../models/event.models'
 
 export enum ResponseType {
   ACCEPT = 'ACCEPT',
@@ -18,50 +19,56 @@ interface InvitationOptions {
   invitationToken: string
   activity: Activity
   invitationType: InvitationType
+  event: Event | null
 }
 
-const createInvitation = async (options: InvitationOptions): Promise<Invitation> => {
-  const { invitationToken, activity, invitationType, user } = options
+const createSingleUserInvitation = async (options: InvitationOptions): Promise<Invitation> => {
+  const { invitationToken, activity, invitationType, user, event } = options
   const invitation = await Invitation.create({
     id: uuid(),
     token: invitationToken,
     activity,
-    event: null,
     type: invitationType,
     status: InvitationStatus.PENDING,
+    event,
     createdAt: Date.now(),
     user,
   })
   return invitation
 }
 
-interface SendInvitationOptions {
+interface CreateUserInvitations {
   users: User[]
-  activityType: ActivityKey
+  activityType: ActivityType
+  event?: Event
+  invitationType: InvitationType
 }
 
-export const sendInvitationToUsers = async (options: SendInvitationOptions): Promise<boolean> => {
-  const { users, activityType } = options
+export const createUserInvitations = async (options: CreateUserInvitations): Promise<Invitation[]> => {
+  const { users, activityType, event = null, invitationType } = options
   const activity = await Activity.findOne({ type: activityType })
 
-  Logger(activityType)
-  Logger(activity)
-
   if (activity === null) {
-    return false
+    throw new Error('Could not find activity')
   }
+
+  const invitations: Promise<Invitation>[] = []
 
   users.forEach(async (user) => {
     try {
       const invitationToken = StringHelpers.createRandomToken()
-      await createInvitation({ user, activity, invitationToken, invitationType: InvitationType.MEMBERSHIP })
-      MessageController.sendJoinInvitation({ user, invitationToken, activity })
+      const invitation = createSingleUserInvitation({ user, activity, invitationToken, event, invitationType })
+
+      invitations.push(invitation)
     } catch (error) {
       console.log(error)
       // Todo: handle error in Sentry?
     }
   })
-  return true
+
+  return Promise.all(invitations).then((response) => {
+    return response
+  })
 }
 
 export const validateInvitation = async (invitationToken: string): Promise<Invitation | null> => {
