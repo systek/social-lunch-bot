@@ -1,5 +1,5 @@
 import { Activity } from '../models/activity.models'
-import * as UserControllers from './users.controllers'
+import * as UserControllers from './user.controllers'
 import { User } from '../models/user.models'
 
 interface DrawOptions {

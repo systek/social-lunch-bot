@@ -10,8 +10,8 @@ import { Logger } from '../helpers/logging.helpers'
 import { Event } from '../models/event.models'
 
 export enum ResponseType {
-  ACCEPT = 'ACCEPT',
-  DECLINE = 'DECLINE',
+  ACCEPTED = 'ACCEPTED',
+  DECLINED = 'DECLINED',
 }
 
 interface InvitationOptions {
@@ -71,7 +71,7 @@ export const createUserInvitations = async (options: CreateUserInvitations): Pro
   })
 }
 
-export const validateInvitation = async (invitationToken: string): Promise<Invitation | null> => {
+export const validateAndGetInvitation = async (invitationToken: string): Promise<Invitation | null> => {
   const invitation = await Invitation.findOne({ token: invitationToken })
 
   return invitation

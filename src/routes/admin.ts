@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import * as AdminControllers from '../controllers/admin.controllers'
 import * as InvitationControllers from '../controllers/invitation.controllers'
-import * as UserControllers from '../controllers/users.controllers'
+import * as UserControllers from '../controllers/user.controllers'
 import * as MessageControllers from '../controllers/message.controllers'
 import * as ActivityControllers from '../controllers/activity.controllers'
 import * as EventControllers from '../controllers/event.controllers'
@@ -39,7 +39,7 @@ export const postInvitationToNewUsers = async (req: Request, res: Response): Pro
 /* Posts invitation to all registered users, but does not check for any new Slack users
  */
 export const postInvitationToAllUsers = async (req: Request, res: Response): Promise<void> => {
-  const allUsers = await UserControllers.allUsers()
+  const allUsers = await UserControllers.getAllUsers()
   const invitations = await InvitationControllers.createUserInvitations({
     users: allUsers,
     activityType: ActivityType.SOCIAL_LUNCH,

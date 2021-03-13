@@ -36,12 +36,12 @@ export const createUser = async (user: SlackUser): Promise<User> => {
   return newUser
 }
 
-export const allUsers = async (): Promise<User[]> => {
+export const getAllUsers = async (): Promise<User[]> => {
   const users = await User.find()
   return users
 }
 
-export const singleUser = async (id: string): Promise<User | null> => {
+export const getSingleUser = async (id: string): Promise<User | null> => {
   return User.findOne({ id })
 }
 
