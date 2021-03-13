@@ -1,19 +1,19 @@
 import mongoose, { Document, Schema } from 'mongoose'
 import { toJSONOverride } from './helpers/toJSON'
 
-export enum ActivityKey {
+export enum ActivityType {
   SOCIAL_LUNCH = 'SOCIAL_LUNCH',
 }
 
 export interface Activity extends Document {
   id: string
   title: string
-  type: ActivityKey
+  type: ActivityType
 }
 
 export interface ActivityInput {
   title: string
-  type: ActivityKey
+  type: ActivityType
 }
 
 export const activitySchema = new Schema<Activity>({
@@ -21,7 +21,7 @@ export const activitySchema = new Schema<Activity>({
   title: String,
   type: {
     type: String,
-    enum: ActivityKey,
+    enum: ActivityType,
   },
 })
 
