@@ -57,7 +57,7 @@ export const findRandomUsersWithActivity = async (options: RandomUserWithActivit
   const { activity } = event
   // Todo: Take previous events into consideration as we want to make sure that all is invited atleast once.
   // Todo: Try to find users with no events within this activity
-  const users = User.find({ activities: activity })
+  const users = User.find({ activities: activity, id: { $nin: exclude } })
   return users
 }
 

@@ -10,7 +10,6 @@ interface DrawOptions {
 // Todo: Create type or interface for Winner.
 export const drawWinners = async (options: DrawOptions): Promise<User[]> => {
   const { event, drawCount, exclude = [] } = options
-  // 1.
   const users = await UserControllers.findRandomUsersWithActivity({ event, limit: drawCount, exclude })
   return users
 }

@@ -64,8 +64,9 @@ const handleEventResponse = async (options: HandleTypeResponseOptions): Promise<
   if (invitation.status === InvitationStatus.REJECTED) {
     await InvitationControllers.rejectInvitation({ invitation, event })
     await MessageControllers.sendRejectConfirmation({ invitation, user })
-    const additionalWinners = await DrawControllers.drawWinners({ event, drawCount: 1, exclude: [] })
-    console.log('additionalWinners', additionalWinners)
+    const rejectedInvitations = await InvitationControllers.getRejectedInvitationForEvent({ event })
+    const excludeUserIds = rejectedInvitations.map((singleInvitation) => singleInvitation.user.id)
+    const additionalWinners = await DrawControllers.drawWinners({ event, drawCount: 1, exclude: excludeUserIds })
 
     const invitations = await InvitationControllers.createUserInvitations({
       users: additionalWinners,

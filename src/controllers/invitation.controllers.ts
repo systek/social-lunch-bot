@@ -27,6 +27,10 @@ interface RejectInvitationOptions {
   event: Event
 }
 
+interface RejectedInvitationForEventOptions {
+  event: Event
+}
+
 const createSingleUserInvitation = async (options: InvitationOptions): Promise<Invitation> => {
   const { invitationToken, activity, invitationType, user, event } = options
   const invitation = await Invitation.create({
@@ -99,4 +103,11 @@ export const updateInvitationResponse = async (options: UpdateInvitationResponse
 export const rejectInvitation = async (options: RejectInvitationOptions): Promise<void> => {
   const { invitation } = options
   invitation.set('status', InvitationStatus.REJECTED)
+}
+
+export const getRejectedInvitationForEvent = async (options: RejectedInvitationForEventOptions): Promise<Invitation[]> => {
+  const { event } = options
+  const rejectedInvitations = await Invitation.find({ event, status: InvitationStatus.REJECTED })
+
+  return rejectedInvitations
 }
