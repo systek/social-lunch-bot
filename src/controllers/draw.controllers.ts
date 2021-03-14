@@ -1,13 +1,16 @@
-import { Activity } from '../models/activity.models'
 import * as UserControllers from './user.controllers'
 import { User } from '../models/user.models'
+import { Event } from '../models/event.models'
 
 interface DrawOptions {
-  activity: Activity
+  event: Event
+  drawCount: number
+  exclude?: string[]
 }
 // Todo: Create type or interface for Winner.
 export const drawWinners = async (options: DrawOptions): Promise<User[]> => {
-  const { activity } = options
-  const users = await UserControllers.findRandomUsersWithActivity(activity)
+  const { event, drawCount, exclude = [] } = options
+  // 1.
+  const users = await UserControllers.findRandomUsersWithActivity({ event, limit: drawCount, exclude })
   return users
 }

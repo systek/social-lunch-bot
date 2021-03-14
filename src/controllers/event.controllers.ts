@@ -10,7 +10,11 @@ interface NewEventOptions {
 
 interface AddUsersToEventOptions {
   event: Event
-  users: User[]
+  user: User
+}
+
+export const getSingleEvent = async (id: string): Promise<Event | null> => {
+  return Event.findOne({ id })
 }
 
 // Todo: Create type or interface for Winner.
@@ -30,7 +34,8 @@ export const createNewEvent = async (options: NewEventOptions): Promise<Event> =
   return event
 }
 
-export const addUsersToEvent = async (options: AddUsersToEventOptions): Promise<Event> => {
-  const { event } = options
-  return event
+export const addUserToEvent = async (options: AddUsersToEventOptions): Promise<void> => {
+  const { event, user } = options
+
+  await User.updateOne({ id: user.id, $push: { event } })
 }

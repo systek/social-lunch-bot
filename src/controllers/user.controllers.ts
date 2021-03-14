@@ -5,6 +5,13 @@ import { Activity } from '../models/activity.models'
 
 import { User } from '../models/user.models'
 import { SlackUser } from '../types/slackUser'
+import { Event } from '../models/event.models'
+
+interface RandomUserWithActivityOptions {
+  event: Event
+  limit: number
+  exclude: string[]
+}
 
 const deleteUsers = async (userIds: string[]): Promise<void> => {
   await User.deleteMany({ id: { $in: userIds } })
@@ -45,8 +52,11 @@ export const getSingleUser = async (id: string): Promise<User | null> => {
   return User.findOne({ id })
 }
 
-export const findRandomUsersWithActivity = async (activity: Activity): Promise<User[]> => {
+export const findRandomUsersWithActivity = async (options: RandomUserWithActivityOptions): Promise<User[]> => {
+  const { event, limit, exclude } = options
+  const { activity } = event
   // Todo: Take previous events into consideration as we want to make sure that all is invited atleast once.
+  // Todo: Try to find users with no events within this activity
   const users = User.find({ activities: activity })
   return users
 }

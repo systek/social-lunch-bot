@@ -63,7 +63,7 @@ export const postNewEvent = async (req: Request, res: Response): Promise<void> =
     activity,
   })
 
-  const winners = await DrawControllers.drawWinners({ activity })
+  const winners = await DrawControllers.drawWinners({ event, drawCount: 5 })
   const invitations = await InvitationControllers.createUserInvitations({
     users: winners,
     activityType: activity.type,

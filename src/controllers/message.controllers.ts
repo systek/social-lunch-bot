@@ -6,6 +6,11 @@ import { ActivityType } from '../models/activity.models'
 import { User } from '../models/user.models'
 import { Invitation, InvitationType } from '../models/invitation.models'
 
+interface ConfirmationOptions {
+  invitation: Invitation
+  user: User
+}
+
 export const sendInvitations = async (invitations: Invitation[]): Promise<boolean> => {
   invitations.forEach((invitation) => {
     const { user, token, activity, type } = invitation
@@ -30,7 +35,8 @@ export const sendInvitations = async (invitations: Invitation[]): Promise<boolea
   return true
 }
 
-export const sendJoinConfirmation = async (invitation: Invitation, user: User): Promise<void> => {
+export const sendJoinConfirmation = async (options: ConfirmationOptions): Promise<void> => {
+  const { invitation, user } = options
   const activityType = invitation.activity.type
   const invitationType = invitation.type
   const { notificationText, messageBlocks } = MessageFactory.buildInvitationAcceptMessage({ activityType, invitationType })
@@ -39,7 +45,8 @@ export const sendJoinConfirmation = async (invitation: Invitation, user: User): 
   // Todo: Withdraw original message
 }
 
-export const sendRejectConfirmation = async (invitation: Invitation, user: User): Promise<void> => {
+export const sendRejectConfirmation = async (options: ConfirmationOptions): Promise<void> => {
+  const { invitation, user } = options
   const activityType = invitation.activity.type
   const invitationType = invitation.type
   const { notificationText, messageBlocks } = MessageFactory.buildInvitationRejectMessage({ activityType, invitationType })

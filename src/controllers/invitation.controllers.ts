@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid'
 
 import { User } from '../models/user.models'
-import * as MessageController from './message.controllers'
+import * as DrawControllers from './draw.controllers'
 import { Activity, ActivityType } from '../models/activity.models'
 
 import * as StringHelpers from '../helpers/string.helpers'
@@ -20,6 +20,11 @@ interface InvitationOptions {
   activity: Activity
   invitationType: InvitationType
   event: Event | null
+}
+
+interface RejectInvitationOptions {
+  invitation: Invitation
+  event: Event
 }
 
 const createSingleUserInvitation = async (options: InvitationOptions): Promise<Invitation> => {
@@ -89,4 +94,9 @@ export const updateInvitationResponse = async (options: UpdateInvitationResponse
   await invitation.save()
 
   return invitation
+}
+
+export const rejectInvitation = async (options: RejectInvitationOptions): Promise<void> => {
+  const { invitation } = options
+  invitation.set('status', InvitationStatus.REJECTED)
 }
