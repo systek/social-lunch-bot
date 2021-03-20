@@ -7,6 +7,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "rootDir": "./src",
     "outDir": "./build",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
@@ -14,5 +15,6 @@
     "moduleResolution": "node",
     "isolatedModules": true,
     "noEmit": false
-  }
+  },
+  "exclude": ["node_modules", "coverage", "build"]
 }

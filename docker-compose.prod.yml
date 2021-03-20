@@ -3,6 +3,10 @@ services:
   mongodb:
     container_name: lunchbot-database
     image: mongo
+    volumes:
+      - lunchbot_production:/data/db
+    ports:
+      - '27017:27017'
   backend:
     container_name: lunchbot-backend
     build:
@@ -13,4 +17,8 @@ services:
     ports:
       - '80:80'
     env_file:
-      - ./env/common.dev.env
+      - ./env/common.prod.env
+      - ./env/secrets.env
+volumes:
+  lunchbot_production:
+    external: false
