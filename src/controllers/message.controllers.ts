@@ -1,28 +1,34 @@
 import * as SlackService from '../services/slack'
 
-import * as MessageFactory from './messageLibrary'
+import * as MessageFactory from './messageFactory'
 
-import { ActivityType } from '../models/activity.models'
 import { User } from '../models/user.models'
 import { Invitation, InvitationType } from '../models/invitation.models'
+import { Event } from '../models/event.models'
 
 interface ConfirmationOptions {
   invitation: Invitation
   user: User
 }
 
+interface ReminderOptions {
+  event: Event
+}
+
 export const sendInvitations = async (invitations: Invitation[]): Promise<boolean> => {
   invitations.forEach((invitation) => {
-    const { user, token, activity, type } = invitation
+    const { user, token, activity, type, event } = invitation
 
-    const invitationDetails =
-      type === InvitationType.EVENT
-        ? {
-            day: 'Tirsdag',
-            url: invitation.event.url,
-          }
-        : {}
-    const { notificationText, messageBlocks } = MessageFactory.buildInvitationMessage({
+    let invitationDetails = { time: 0, url: '' }
+
+    if (type === InvitationType.EVENT) {
+      invitationDetails = {
+        time: event.eventTime,
+        url: invitation.event.url,
+      }
+    }
+
+    const { notificationText, messageBlocks } = MessageFactory.buildInvitation({
       invitationToken: token,
       activityType: activity.type,
       invitationType: invitation.type,
@@ -35,13 +41,33 @@ export const sendInvitations = async (invitations: Invitation[]): Promise<boolea
   return true
 }
 
+export const sendReminders = async (options: ReminderOptions): Promise<boolean> => {
+  const { event } = options
+
+  console.log(event.users)
+
+  event.users.forEach((user) => {
+    const reminderOptions = {
+      invitationType: InvitationType.EVENT,
+      eventDetails: {
+        time: event.eventTime,
+        url: event.url,
+      },
+    }
+    const { notificationText, messageBlocks } = MessageFactory.buildReminderMessage(reminderOptions)
+
+    SlackService.sendMessage({ notificationText, messageBlocks, user })
+  })
+
+  return true
+}
+
 export const sendJoinConfirmation = async (options: ConfirmationOptions): Promise<void> => {
   const { invitation, user } = options
   const activityType = invitation.activity.type
   const invitationType = invitation.type
   const { notificationText, messageBlocks } = MessageFactory.buildInvitationAcceptMessage({ activityType, invitationType })
-  console.log('sendJoinConfirmation')
-  SlackService.sendMessage({ notificationText, messageBlocks, user })
+  SlackService.sendMessage({ notificationText, user })
   // Todo: Withdraw original message
 }
 
@@ -49,16 +75,6 @@ export const sendRejectConfirmation = async (options: ConfirmationOptions): Prom
   const { invitation, user } = options
   const activityType = invitation.activity.type
   const invitationType = invitation.type
-  const { notificationText, messageBlocks } = MessageFactory.buildInvitationRejectMessage({ activityType, invitationType })
-  SlackService.sendMessage({ notificationText, messageBlocks, user })
-}
-
-export const sendThisWeeksInvitation = (activityType: ActivityType) => {}
-
-export const sendLunchInvitation = (lunchGuests: any[]): Promise<boolean> => {
-  // 1. Get pool of participants
-  // 2. Take weight into account to avoid drawing people who just did lunsj
-  // 3. Send out invitations
-
-  return new Promise((resolve) => resolve)
+  const { notificationText } = MessageFactory.buildInvitationRejectMessage({ activityType, invitationType })
+  SlackService.sendMessage({ notificationText, user })
 }

@@ -14,6 +14,7 @@ export enum InvitationStatus {
 export enum InvitationType {
   MEMBERSHIP = 'MEMBERSHIP',
   EVENT = 'EVENT',
+  REMINDER = 'REMINDER',
 }
 
 export interface Invitation extends Document {

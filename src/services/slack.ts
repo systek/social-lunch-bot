@@ -1,5 +1,4 @@
 import { WebAPICallResult, WebClient } from '@slack/web-api'
-import { MessageAttachment } from '@slack/types'
 
 import { User } from '../models/user.models'
 
@@ -41,12 +40,16 @@ export const getStatus = async (): Promise<boolean> => {
 
 interface SendMessageOptions {
   notificationText: string
-  messageBlocks: any
+  messageBlocks?: any
   user: User
 }
 
 export const sendMessage = async (options: SendMessageOptions): Promise<void> => {
   const { user, notificationText, messageBlocks } = options
+
+  if (user.slackId[0] !== 'U') {
+    return
+  }
   try {
     slack.chat.postMessage({
       channel: user.slackId,

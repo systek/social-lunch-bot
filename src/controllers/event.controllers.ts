@@ -20,7 +20,7 @@ export const getSingleEvent = async (id: string): Promise<Event | null> => {
 // Todo: Create type or interface for Winner.
 export const createNewEvent = async (options: NewEventOptions): Promise<Event> => {
   const { eventTime, activity } = options
-  const url = 'http://meet.google.com/somesystekurl'
+  const url = process.env.MEET_URL
   const event = new Event({
     id: uuid(),
     activity,
@@ -37,5 +37,8 @@ export const createNewEvent = async (options: NewEventOptions): Promise<Event> =
 export const addUserToEvent = async (options: AddUsersToEventOptions): Promise<void> => {
   const { event, user } = options
 
-  await User.updateOne({ id: user.id, $push: { event } })
+  console.log('Adding user to event', event, user)
+
+  const updateResult = await Event.updateOne({ _id: event._id }, { $push: { users: user } })
+  console.log(updateResult)
 }

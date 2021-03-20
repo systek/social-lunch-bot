@@ -17,6 +17,6 @@ export const getHealth = async (req: Request, res: Response): Promise<void> => {
   res.json(healthStatus)
 }
 
-export const route404 = (req: Request, res: Response) => {
+export const route404 = (req: Request, res: Response): void => {
   res.sendStatus(404)
 }

@@ -53,7 +53,7 @@ export const getSingleUser = async (id: string): Promise<User | null> => {
 }
 
 export const findRandomUsersWithActivity = async (options: RandomUserWithActivityOptions): Promise<User[]> => {
-  const { event, limit, exclude } = options
+  const { event, exclude } = options
   const { activity } = event
   // Todo: Take previous events into consideration as we want to make sure that all is invited atleast once.
   // Todo: Try to find users with no events within this activity

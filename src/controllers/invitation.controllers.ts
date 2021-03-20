@@ -1,12 +1,10 @@
 import { v4 as uuid } from 'uuid'
 
 import { User } from '../models/user.models'
-import * as DrawControllers from './draw.controllers'
 import { Activity, ActivityType } from '../models/activity.models'
 
 import * as StringHelpers from '../helpers/string.helpers'
 import { Invitation, InvitationStatus, InvitationType } from '../models/invitation.models'
-import { Logger } from '../helpers/logging.helpers'
 import { Event } from '../models/event.models'
 
 export enum ResponseType {

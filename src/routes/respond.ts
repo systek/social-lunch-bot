@@ -1,10 +1,6 @@
 import { Request, Response } from 'express'
-import * as UserControllers from '../controllers/user.controllers'
 import * as InvitationControllers from '../controllers/invitation.controllers'
 import * as RespondControllers from '../controllers/respond.controllers'
-import * as ActivityControllers from '../controllers/activity.controllers'
-import * as MessageControllers from '../controllers/message.controllers'
-import { InvitationStatus, InvitationType } from '../models/invitation.models'
 import { RespondAction } from '../types/respond'
 
 export const postRespond = async (req: Request, res: Response): Promise<void> => {

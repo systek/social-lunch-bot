@@ -74,3 +74,14 @@ export const postNewEvent = async (req: Request, res: Response): Promise<void> =
 
   res.json({ success: true })
 }
+
+export const postReminder = async (req: Request, res: Response): Promise<void> => {
+  const { eventId }: { eventId: string } = req.body
+  const event = await EventControllers.getSingleEvent(eventId)
+  if (!event) {
+    throw new Error('Event not found.')
+  }
+  MessageControllers.sendReminders({ event })
+
+  res.json({ success: true })
+}

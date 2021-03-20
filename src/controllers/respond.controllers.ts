@@ -51,7 +51,7 @@ const handleEventResponse = async (options: HandleTypeResponseOptions): Promise<
     const eventHasUserAlready = event.users.find((eventUser) => eventUser.id === invitation.user.id)
 
     if (eventHasUserAlready) {
-      // Send information that you've already accepted.
+      console.log('Event has user already')
       return
     }
 
