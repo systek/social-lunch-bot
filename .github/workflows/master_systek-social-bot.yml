@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.AzureAppService_ContainerPassword_5fb7e8168abf4a3e827e038fec95a590 }}
 
       - run: |
-          docker build . -f ./docker/Dockerfile.prod.yml -t slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}
+          docker build . -f ./docker/Dockerfile.prod -t slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}
           docker push slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}
 
       - name: Deploy to Azure Web App
