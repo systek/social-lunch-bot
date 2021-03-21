@@ -15,7 +15,7 @@ export const App = async (): Promise<void> => {
   const adminSecret = process.env.ADMIN_SECRET
 
   if (!slackSecret) {
-    throw new Error('Could not find secrets. Please see readme for information.')
+    throw new Error('Could not find secrets. Please see readme for information!')
   }
 
   const app: Application = express()
