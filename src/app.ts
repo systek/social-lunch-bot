@@ -32,7 +32,7 @@ export const App = async (): Promise<void> => {
     next()
   }
 
-  // Start services
+  // Start both services
   await SlackService.initSlackConnection()
   await DatabaseService.initDatabaseConnection()
 
