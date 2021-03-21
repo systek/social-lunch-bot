@@ -7,8 +7,6 @@ export const getHealth = async (req: Request, res: Response): Promise<void> => {
   const slackStatus = await SlackService.getStatus()
   const connectionStatus = DatabaseService.getStatus()
 
-  console.log(slackStatus)
-
   const healthStatus = {
     slack: slackStatus,
     database: connectionStatus,

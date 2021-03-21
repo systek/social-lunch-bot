@@ -10,7 +10,15 @@ enum DatabaseState {
 }
 
 export const initDatabaseConnection = (): Promise<mongoose.Connection> => {
-  mongoose.connect('mongodb://mongodb/systek_social', { useNewUrlParser: true, useUnifiedTopology: true })
+  const { MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD } = process.env
+  mongoose.connect('mongodb://mongodb/systek_social', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    user: MONGO_INITDB_ROOT_USERNAME,
+    pass: MONGO_INITDB_ROOT_PASSWORD,
+    authSource: 'admin',
+  })
+  mongoose.connection.useDb('systek_social')
 
   db = mongoose.connection
   return new Promise<mongoose.Connection>((resolve, reject) => {
