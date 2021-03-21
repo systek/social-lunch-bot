@@ -15,8 +15,8 @@ services:
     image: systek.socialbot:latest
     container_name: lunchbot-backend
     build:
-      context: ./
-      dockerfile: ./docker/Dockerfile.prod
+      context: ./docker
+      dockerfile: Dockerfile.prod
     depends_on:
       - mongodb
     ports:
