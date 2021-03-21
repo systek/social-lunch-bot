@@ -5,3 +5,4 @@ env/database.env
 coverage
 .nyc_output
 data
+.act-secrets
