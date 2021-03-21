@@ -1,6 +1,7 @@
 build
 node_modules
 env/secrets.env
+env/database.env
 coverage
 .nyc_output
 data

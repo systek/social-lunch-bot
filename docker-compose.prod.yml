@@ -3,11 +3,15 @@ services:
   mongodb:
     container_name: lunchbot-database
     image: mongo
+    restart: always
+    env_file:
+      - ./env/database.env
     volumes:
       - lunchbot_production:/data/db
     ports:
       - '27017:27017'
   backend:
+    image: systek.socialbot:latest
     container_name: lunchbot-backend
     build:
       context: ./
@@ -16,6 +20,7 @@ services:
       - mongodb
     ports:
       - '80:80'
+    restart: always
     env_file:
       - ./env/common.prod.env
       - ./env/secrets.env
