@@ -13,7 +13,6 @@ export const App = async (): Promise<void> => {
   const serverPort = process.env.PORT || 4001
   const slackSecret = process.env.SLACK_SECRET_TOKEN
   const adminSecret = process.env.ADMIN_SECRET
-  console.log(process.env)
 
   if (!slackSecret) {
     throw new Error('Could not find secrets. Please see readme for information!')

@@ -1,29 +1,13 @@
 version: '3.8'
 services:
-  mongodb:
-    container_name: lunchbot-database
-    image: mongo:latest
-    restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=${SOCIAL_BOT_DB_USERNAME}
-      - MONGO_INITDB_ROOT_PASSWORD=${SOCIAL_BOT_DB_PASSWORD}
-    volumes:
-      - lunchbot_production:/data/db
-    ports:
-      - '27017:27017'
   backend:
     image: systek.socialbot:latest
     container_name: lunchbot-backend
     build:
-      context: ./docker
-      dockerfile: Dockerfile.prod
-    depends_on:
-      - mongodb
+      context: ./
+      dockerfile: ./docker/Dockerfile.prod
     ports:
       - '80:80'
     restart: always
     env_file:
       - ./env/common.prod.env
-volumes:
-  lunchbot_production:
-    external: false
