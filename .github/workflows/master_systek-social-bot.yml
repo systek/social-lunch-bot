@@ -14,22 +14,22 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@master
 
-    - uses: azure/docker-login@v1
-      with:
-        login-server: https://slackbotregistry.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_5fb7e8168abf4a3e827e038fec95a590 }}
+      - uses: azure/docker-login@v1
+        with:
+          login-server: https://slackbotregistry.azurecr.io/
+          username: ${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}
+          password: ${{ secrets.AzureAppService_ContainerPassword_5fb7e8168abf4a3e827e038fec95a590 }}
 
-    - run: |
-        docker build . -t slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}
-        docker push slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}
+      - run: |
+          docker build . -f Dockerfile.prod.yml -t slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}
+          docker push slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}
 
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v2
-      with:
-        app-name: 'systek-social-bot'
-        slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_f1a0168093c04734845b2c5ef96e868e }}
-        images: 'slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}'
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'systek-social-bot'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_f1a0168093c04734845b2c5ef96e868e }}
+          images: 'slackbotregistry.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_deed79e52d9a4f5f8f9fe43bb82c49ba }}/slackbot:${{ github.sha }}'

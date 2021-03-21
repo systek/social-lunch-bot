@@ -2,10 +2,11 @@ version: '3.8'
 services:
   mongodb:
     container_name: lunchbot-database
-    image: mongo
+    image: mongo:latest
     restart: always
-    env_file:
-      - ./env/database.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${SOCIAL_BOT_DB_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${SOCIAL_BOT_DB_PASSWORD}
     volumes:
       - lunchbot_production:/data/db
     ports:
@@ -23,7 +24,6 @@ services:
     restart: always
     env_file:
       - ./env/common.prod.env
-      - ./env/secrets.env
 volumes:
   lunchbot_production:
     external: false

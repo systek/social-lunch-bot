@@ -85,3 +85,7 @@ export const postReminder = async (req: Request, res: Response): Promise<void> =
 
   res.json({ success: true })
 }
+
+export const works = (req: Request, res: Response): void => {
+  res.json({ works: true })
+}
