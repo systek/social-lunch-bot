@@ -20,7 +20,7 @@ export const getSingleEvent = async (id: string): Promise<Event | null> => {
 // Todo: Create type or interface for Winner.
 export const createNewEvent = async (options: NewEventOptions): Promise<Event> => {
   const { eventTime, activity } = options
-  const url = process.env.MEET_URL
+  const url = process.env.APP_EVENT_MEET_URL
   const event = new Event({
     id: uuid(),
     activity,

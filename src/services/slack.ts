@@ -6,7 +6,7 @@ import { User } from '../models/user.models'
 let slack: WebClient
 
 export const initSlackConnection = (): Promise<WebClient> => {
-  const secretSlackToken = process.env.SLACK_SECRET_TOKEN
+  const secretSlackToken = process.env.APP_SLACK_TOKEN
 
   if (!secretSlackToken) {
     throw new Error(
@@ -51,11 +51,12 @@ export const sendMessage = async (options: SendMessageOptions): Promise<void> =>
     return
   }
   try {
-    slack.chat.postMessage({
+    const messageResult = await slack.chat.postMessage({
       channel: user.slackId,
       text: notificationText,
       blocks: messageBlocks,
     })
+    console.log(messageResult)
   } catch (error) {
     throw new Error(`'Could not send message. Slack returned error: ${error}'`)
   }

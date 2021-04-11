@@ -28,9 +28,9 @@ The slack token is added in a separate env file, which you have to create yourse
 Secrets.env contents:
 
 ```
-SLACK_SECRET_TOKEN="your-token-here"
-ADMIN_SECRET="your-secret-here"
-MEET_URL="https://meet.google.com/(google-meet-code-here)"
+APP_SLACK_TOKEN="your-token-here"
+APP_ADMIN_REST_TOKEN="your-secret-here"
+APP_EVENT_MEET_URL="https://meet.google.com/(google-meet-code-here)"
 ```
 
 ### Running the application locally

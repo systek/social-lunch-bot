@@ -1,23 +1,11 @@
-import { Request, Response } from 'express'
 import * as InvitationControllers from '../controllers/invitation.controllers'
 import * as RespondControllers from '../controllers/respond.controllers'
 import { RespondAction } from '../types/respond'
 
-export const postRespond = async (req: Request, res: Response): Promise<void> => {
-  console.log(req.body)
-  const { payload }: { payload: string } = req.body
-  let json = null
-
-  try {
-    json = JSON.parse(payload)
-  } catch (error) {
-    throw new Error(error)
-  }
-
+export const respondHandler = async (json: any): Promise<boolean> => {
   const { actions } = json
   if (actions.length === 0) {
-    res.json({ success: false })
-    return
+    return false
   }
 
   const action: RespondAction = actions[0]
@@ -29,11 +17,10 @@ export const postRespond = async (req: Request, res: Response): Promise<void> =>
   const invitation = await InvitationControllers.validateAndGetInvitation(invitationToken)
 
   if (!invitation) {
-    res.json({ success: false })
-    return
+    return false
   }
 
   RespondControllers.handleResponse({ invitation, responseType })
 
-  res.json({ success: true })
+  return true
 }
