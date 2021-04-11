@@ -35,6 +35,7 @@ jobs:
           npm run test --if-present
           popd
       - name: 'Push to container registry'
+        uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
