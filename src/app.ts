@@ -4,6 +4,7 @@ import bearerToken from 'express-bearer-token'
 
 import * as DatabaseService from './services/database'
 import * as SlackService from './services/slack'
+// import * as Scheduler from './services/schedule'
 
 import * as RouteHandlers from './routes'
 import * as CommonRoutes from './admin/common'
@@ -34,6 +35,7 @@ export const App = async (): Promise<void> => {
   // Start both services
   await SlackService.initSlackConnection()
   await DatabaseService.initDatabaseConnection()
+  // Scheduler.startSchedules()
 
   app.get('/health', CommonRoutes.getHealth)
   app.post('/admin/activities', authentication, RouteHandlers.postNewActivity)

@@ -6,6 +6,7 @@ import { toJSONOverride } from './helpers/toJSON'
 /** This is the model representing each Slack user along with their
  * activities and invitations
  */
+
 export interface User extends Document {
   id: string
   slackId: string

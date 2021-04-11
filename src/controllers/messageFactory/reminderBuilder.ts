@@ -9,7 +9,7 @@ export const buildEventReminder = (options: RemindOptions): any => {
   let notificationText = ''
 
   if (invitationType === InvitationType.EVENT) {
-    notificationText = `God morgen! Gå inn på følgende lenke kl ${DateHelpers.timeToHuman(eventDetails.time, false)} for å bli med på lunsj! ${
+    notificationText = `God morgen! Gå inn på følgende lenke kl ${DateHelpers.timeToHuman(eventDetails.time, true)} for å bli med på lunsj! ${
       eventDetails.url
     }`
   }

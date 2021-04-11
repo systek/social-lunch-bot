@@ -63,9 +63,13 @@ const handleEventResponse = async (options: HandleTypeResponseOptions): Promise<
 
   if (invitation.status === InvitationStatus.REJECTED) {
     await InvitationControllers.rejectInvitation({ invitation, event })
+    await EventControllers.removeUserFromEvent({ user, event })
     await MessageControllers.sendRejectConfirmation({ invitation, user })
+
+    // Now, start a new draw to replace the person rejecting.
     const rejectedInvitations = await InvitationControllers.getRejectedInvitationForEvent({ event })
-    const excludeUserIds = rejectedInvitations.map((singleInvitation) => singleInvitation.user.id)
+    const usersAlreadyInEvent = event.users.map((singleUser) => singleUser.id)
+    const excludeUserIds = [...rejectedInvitations.map((singleInvitation) => singleInvitation.user.id), ...usersAlreadyInEvent]
     const additionalWinners = await DrawControllers.drawWinners({ event, drawCount: 1, exclude: excludeUserIds })
 
     const invitations = await InvitationControllers.createUserInvitations({

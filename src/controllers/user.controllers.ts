@@ -1,3 +1,4 @@
+import { LeanDocument } from 'mongoose'
 import { v4 as uuid } from 'uuid'
 
 import * as SlackService from '../services/slack'
@@ -9,7 +10,6 @@ import { Event } from '../models/event.models'
 
 interface RandomUserWithActivityOptions {
   event: Event
-  limit: number
   exclude: string[]
 }
 
@@ -52,12 +52,17 @@ export const getSingleUser = async (id: string): Promise<User | null> => {
   return User.findOne({ id })
 }
 
-export const findRandomUsersWithActivity = async (options: RandomUserWithActivityOptions): Promise<User[]> => {
+export const getUsersById = async (ids: string[]): Promise<User[]> => {
+  return User.find({ id: { $in: ids } })
+}
+
+export const findUsersWithActivity = async (options: RandomUserWithActivityOptions): Promise<User[]> => {
   const { event, exclude } = options
   const { activity } = event
   // Todo: Take previous events into consideration as we want to make sure that all is invited atleast once.
   // Todo: Try to find users with no events within this activity
-  const users = User.find({ activities: activity, id: { $nin: exclude } })
+  const users = await User.find({ activities: activity, id: { $nin: exclude } })
+
   return users
 }
 

@@ -1,4 +1,3 @@
-import { Request, Response } from 'express'
 import * as AdminControllers from '../controllers/admin.controllers'
 import { ActivityInput } from '../models/activity.models'
 import { UserInput } from '../models/user.models'

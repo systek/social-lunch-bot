@@ -98,9 +98,12 @@ export const updateInvitationResponse = async (options: UpdateInvitationResponse
   return invitation
 }
 
-export const rejectInvitation = async (options: RejectInvitationOptions): Promise<void> => {
+export const rejectInvitation = async (options: RejectInvitationOptions): Promise<Invitation> => {
   const { invitation } = options
   invitation.set('status', InvitationStatus.REJECTED)
+  await invitation.save()
+
+  return invitation
 }
 
 export const getRejectedInvitationForEvent = async (options: RejectedInvitationForEventOptions): Promise<Invitation[]> => {
