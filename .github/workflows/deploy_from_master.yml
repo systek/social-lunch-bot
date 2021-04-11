@@ -38,7 +38,7 @@ jobs:
         uses: azure/docker-login@v1
         with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
-        run: |
+      - run: |
           docker build -f ./docker/Dockerfile.prod . -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
           docker push ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
       - name: 'Run Azure Functions Action'
