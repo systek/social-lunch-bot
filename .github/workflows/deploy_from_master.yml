@@ -35,9 +35,10 @@ jobs:
           npm run test --if-present
           popd
       - name: 'Push to container registry'
-        uses: azure/docker-login@v1
         with:
-          creds: ${{secrets.AZURE_CREDENTIALS}}
+          login-server: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
+          username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+          password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
       - run: |
           docker build -f ./docker/Dockerfile.prod . -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
           docker push ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
