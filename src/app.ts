@@ -10,7 +10,7 @@ import * as RouteHandlers from './routes'
 import * as CommonRoutes from './admin/common'
 
 export const App = async (): Promise<void> => {
-  const serverPort = process.env.PORT || 4001
+  const serverPort = process.env.PORT || 80
   const slackSecret = process.env.APP_SLACK_TOKEN
   const adminSecret = process.env.APP_ADMIN_REST_TOKEN
 
