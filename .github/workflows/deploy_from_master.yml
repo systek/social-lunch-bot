@@ -36,8 +36,8 @@ jobs:
           popd
       - name: 'Push to container registry'
         run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
+          docker build . -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
+          docker push ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1
         id: fa
