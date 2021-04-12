@@ -6,7 +6,6 @@ import { createNewEvent } from '../admin/event'
 export const postEventRouteHandler = async (req: Request, res: Response): Promise<void> => {
   const { eventTime, activityType } = req.body
 
-  createNewEvent({ eventTime, activityType })
-
-  res.json({ success: true })
+  const winners = await createNewEvent({ eventTime, activityType })
+  res.json(winners)
 }

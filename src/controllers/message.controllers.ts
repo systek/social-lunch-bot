@@ -34,7 +34,6 @@ export const sendInvitations = async (invitations: Invitation[]): Promise<boolea
       invitationType: invitation.type,
       invitationDetails,
     })
-    console.log('invitation', invitation)
     SlackService.sendMessage({ notificationText, messageBlocks, user })
   })
 
@@ -43,8 +42,6 @@ export const sendInvitations = async (invitations: Invitation[]): Promise<boolea
 
 export const sendReminders = async (options: ReminderOptions): Promise<boolean> => {
   const { event } = options
-
-  console.log(event.users)
 
   event.users.forEach((user) => {
     const reminderOptions = {

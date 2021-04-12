@@ -13,8 +13,6 @@ export const addActivity = async (activityInput: ActivityInput): Promise<Activit
     ...activityInput,
   })
 
-  console.log(activity)
-
   try {
     await activity.save()
   } catch (err) {

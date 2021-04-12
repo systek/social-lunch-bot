@@ -68,7 +68,6 @@ export const createUserInvitations = async (options: CreateUserInvitations): Pro
 
       invitations.push(invitation)
     } catch (error) {
-      console.log(error)
       // Todo: handle error in Sentry?
     }
   })

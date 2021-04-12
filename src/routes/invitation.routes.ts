@@ -13,7 +13,6 @@ export const postInvitationToAllUsers = async (req: Request, res: Response): Pro
 
 export const postInvitationtoNewUsers = async (req: Request, res: Response): Promise<void> => {
   const { activityType }: { activityType: ActivityType } = req.body
-  console.log('activityType', activityType)
   postMembershipInvitationToNewUser(activityType)
 
   res.sendStatus(204)

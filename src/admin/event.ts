@@ -3,15 +3,18 @@ import * as EventControllers from '../controllers/event.controllers'
 import * as MessageControllers from '../controllers/message.controllers'
 import * as DrawControllers from '../controllers/draw.controllers'
 import * as InvitationControllers from '../controllers/invitation.controllers'
+
 import { ActivityType } from '../models/activity.models'
 import { InvitationType } from '../models/invitation.models'
+
+import { User } from '../models/user.models'
 
 interface CreateNewEventOptions {
   eventTime: number
   activityType: ActivityType
 }
 
-export const createNewEvent = async (options: CreateNewEventOptions): Promise<boolean> => {
+export const createNewEvent = async (options: CreateNewEventOptions): Promise<User[]> => {
   const { eventTime, activityType } = options
   const activity = await ActivityControllers.getActivityByType(activityType)
 
@@ -32,5 +35,5 @@ export const createNewEvent = async (options: CreateNewEventOptions): Promise<bo
     invitationType: InvitationType.EVENT,
   })
   await MessageControllers.sendInvitations(invitations)
-  return true
+  return winners
 }
