@@ -26,6 +26,7 @@ jobs:
         with:
           creds: ${{secrets.AZURE_CREDENTIALS}}
           enable-AzPSSession: false
+
       - name: 'Resolve Project Dependencies Using Npm'
         shell: bash
         run: |
@@ -34,19 +35,23 @@ jobs:
           npm run build --if-present
           npm run test --if-present
           popd
+
       - name: 'Push to container registry'
         uses: azure/docker-login@v1
         with:
           login-server: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}
           username: ${{ secrets.AZURE_REGISTRY_USERNAME }}
           password: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
-      - run: |
-          docker build -f ./docker/Dockerfile.prod . -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
-          docker push ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/slackbot:${{ github.sha }}
-      - name: 'Run Azure Functions Action'
-        uses: Azure/functions-action@v1
+
+      - name: 'Compose Customized Docker Image'
+        shell: bash
+        run: |
+          docker build -f ./docker/Dockerfile.prod . -t ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/systeksocial/slackbot:${{ github.sha }}
+          docker push ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/systeksocial/slackbot:${{ github.sha }}
+
+      - name: 'Run Azure Functions Container Action'
+        uses: Azure/functions-container-action@v1
         id: fa
         with:
           app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          image: ${{ secrets.AZURE_REGISTRY_LOGIN_SERVER }}/systeksocial/slackbot:${{ github.sha }}
