@@ -54,14 +54,14 @@ og så skriver du utlegg til Systek. Har du lyst til å være med i trekningen?`
 
 export const buildEventInvitation = (options: BuildInvitationOptions): any => {
   const { invitationToken, invitationDetails } = options
-  const notificationText = `God morgen! Du er invitert til lunsj på ${DateHelpers.timeToHuman(invitationDetails.time, false)}!`
+  const notificationText = `God morgen! Du er invitert til lunsj førstkommende ${DateHelpers.timeToHuman(invitationDetails.time, false)}!`
 
   const messageBlocks = [
     {
       type: 'section',
       text: {
         type: 'mrkdwn',
-        text: `God morgen! Du er invitert til lunsj med 5 andre kollegaer ${DateHelpers.timeToHuman(invitationDetails.time, false)}!
+        text: `God morgen! Du er invitert til lunsj med 5 andre kollegaer førstkommende ${DateHelpers.timeToHuman(invitationDetails.time, false)}!
 Vi håper du kan være med! Hvis det ikke passer denne gangen er det flott om du svarer
 raskt - da kan nemlig en annen heldig vinner få plassen din!`,
       },
