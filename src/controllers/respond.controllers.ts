@@ -62,24 +62,27 @@ const handleEventResponse = async (options: HandleTypeResponseOptions): Promise<
   }
 
   if (invitation.status === InvitationStatus.REJECTED) {
+    const TWELVE_HOURS = 3600 * 12 * 1000
     await InvitationControllers.rejectInvitation({ invitation, event })
     await EventControllers.removeUserFromEvent({ user, event })
     await MessageControllers.sendRejectConfirmation({ invitation, user })
 
-    // Now, start a new draw to replace the person rejecting.
-    const rejectedInvitations = await InvitationControllers.getRejectedInvitationForEvent({ event })
-    const usersAlreadyInEvent = event.users.map((singleUser) => singleUser.id)
-    const excludeUserIds = [...rejectedInvitations.map((singleInvitation) => singleInvitation.user.id), ...usersAlreadyInEvent]
-    const additionalWinners = await DrawControllers.drawWinners({ event, drawCount: 1, exclude: excludeUserIds })
+    // Now, start a new draw to replace the person rejecting, but only until 8 hours prior.
+    if (event.eventTime - Date.now() > TWELVE_HOURS) {
+      console.log('did sent out another invitation')
+      const rejectedInvitations = await InvitationControllers.getRejectedInvitationForEvent({ event })
+      const usersAlreadyInEvent = event.users.map((singleUser) => singleUser.id)
+      const excludeUserIds = [...rejectedInvitations.map((singleInvitation) => singleInvitation.user.id), ...usersAlreadyInEvent]
+      const additionalWinners = await DrawControllers.drawWinners({ event, drawCount: 1, exclude: excludeUserIds })
 
-    const invitations = await InvitationControllers.createUserInvitations({
-      users: additionalWinners,
-      activityType: event.activity.type,
-      invitationType: invitation.type,
-      event,
-    })
-
-    await MessageControllers.sendInvitations(invitations)
+      const invitations = await InvitationControllers.createUserInvitations({
+        users: additionalWinners,
+        activityType: event.activity.type,
+        invitationType: invitation.type,
+        event,
+      })
+      await MessageControllers.sendInvitations(invitations)
+    }
   }
 }
 
