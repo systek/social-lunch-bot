@@ -10,6 +10,10 @@ interface ConfirmationOptions {
   invitation: Invitation
   user: User
 }
+interface LunchInformationOptions {
+  conversationId: string
+  event: Event
+}
 
 interface ReminderOptions {
   event: Event
@@ -59,11 +63,28 @@ export const sendReminders = async (options: ReminderOptions): Promise<boolean> 
   return true
 }
 
+export const sendDigitalLunchInformation = async (options: LunchInformationOptions): Promise<boolean> => {
+  const { conversationId, event } = options
+
+  const reminderOptions = {
+    invitationType: InvitationType.EVENT,
+    eventDetails: {
+      time: event.eventTime,
+      url: event.url,
+    },
+  }
+  const { notificationText, messageBlocks } = MessageFactory.buildLunchInformationMessage(reminderOptions)
+
+  SlackService.sendConversation({ notificationText, messageBlocks, conversationId })
+
+  return true
+}
+
 export const sendJoinConfirmation = async (options: ConfirmationOptions): Promise<void> => {
   const { invitation, user } = options
   const activityType = invitation.activity.type
   const invitationType = invitation.type
-  const { notificationText, messageBlocks } = MessageFactory.buildInvitationAcceptMessage({ activityType, invitationType })
+  const { notificationText } = MessageFactory.buildInvitationAcceptMessage({ activityType, invitationType })
   SlackService.sendMessage({ notificationText, user })
   // Todo: Withdraw original message
 }

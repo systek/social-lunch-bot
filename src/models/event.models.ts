@@ -8,6 +8,7 @@ export interface Event extends Document {
   id: string
   activity: Activity
   eventTime: number
+  slackChannelId: string
   url: string
   address: string
   users: User[]
@@ -17,6 +18,7 @@ export const eventSchema = new Schema<Event>({
   id: String,
   activity: activitySchema,
   eventTime: Number,
+  slackChannelId: String,
   url: String,
   address: String,
   users: [User.schema],

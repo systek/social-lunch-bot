@@ -1,4 +1,4 @@
-import { WebAPICallResult, WebClient } from '@slack/web-api'
+import { ChannelsCreateArguments, ConversationsCreateArguments, ConversationsOpenArguments, WebAPICallResult, WebClient } from '@slack/web-api'
 
 import { User } from '../models/user.models'
 
@@ -44,6 +44,16 @@ interface SendMessageOptions {
   user: User
 }
 
+interface SendConversationOptions {
+  notificationText: string
+  messageBlocks: any
+  conversationId: string
+}
+
+interface CreateDMGroupOptions {
+  userIds: string[]
+}
+
 export const sendMessage = async (options: SendMessageOptions): Promise<void> => {
   const { user, notificationText, messageBlocks } = options
 
@@ -53,6 +63,31 @@ export const sendMessage = async (options: SendMessageOptions): Promise<void> =>
   try {
     await slack.chat.postMessage({
       channel: user.slackId,
+      text: notificationText,
+      blocks: messageBlocks,
+    })
+  } catch (error) {
+    throw new Error(`'Could not send message. Slack returned error: ${error}'`)
+  }
+}
+
+export const createConversation = async (options: CreateDMGroupOptions): Promise<string | null> => {
+  const { userIds } = options
+
+  const conversationOptions: ConversationsOpenArguments = { users: userIds.join(',') }
+
+  const conversation: WebAPICallResult & { channel?: { id: string } } = await slack.conversations.open(conversationOptions)
+
+  const { channel } = conversation
+  return channel?.id || null
+}
+
+export const sendConversation = async (options: SendConversationOptions): Promise<void> => {
+  const { notificationText, messageBlocks, conversationId } = options
+
+  try {
+    await slack.chat.postMessage({
+      channel: conversationId,
       text: notificationText,
       blocks: messageBlocks,
     })

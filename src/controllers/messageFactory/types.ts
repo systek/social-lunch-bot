@@ -14,6 +14,10 @@ export interface RemindOptions {
   invitationType: InvitationType
   eventDetails: Details
 }
+export interface LunchInformationOptions {
+  invitationType: InvitationType
+  eventDetails: Details
+}
 
 export interface InvitationMessageOptions {
   invitationToken: string

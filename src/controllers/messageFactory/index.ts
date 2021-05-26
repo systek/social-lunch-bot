@@ -2,10 +2,10 @@ import { ActivityType } from '../../models/activity.models'
 import { InvitationType } from '../../models/invitation.models'
 
 import { buildMembershipInvitation, buildEventInvitation } from './invitationBuilder'
-import { buildEventReminder } from './reminderBuilder'
+import { buildEventReminder, buildEventInformation } from './reminderBuilder'
 import { buildAcceptConfirmationMessage, buildRejectConfirmationMessage } from './respondBuilder'
 
-import { InvitationMessageOptions, MessageContent, ReminderMessageOptions } from './types'
+import { InvitationMessageOptions, MessageContent, ReminderMessageOptions, LunchInformationOptions } from './types'
 
 export const buildInvitation = (options: InvitationMessageOptions): MessageContent => {
   const { invitationToken, invitationType, invitationDetails } = options
@@ -26,6 +26,16 @@ export const buildReminderMessage = (options: ReminderMessageOptions): MessageCo
 
   if (invitationType === InvitationType.EVENT) {
     return buildEventReminder({ invitationType, eventDetails })
+  }
+
+  return { notificationText: '', messageBlocks: [] }
+}
+
+export const buildLunchInformationMessage = (options: LunchInformationOptions): MessageContent => {
+  const { invitationType, eventDetails } = options
+
+  if (invitationType === InvitationType.EVENT) {
+    return buildEventInformation({ invitationType, eventDetails })
   }
 
   return { notificationText: '', messageBlocks: [] }

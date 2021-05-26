@@ -43,6 +43,7 @@ export const App = async (): Promise<void> => {
   app.post('/admin/invites/allUsers', authentication, RouteHandlers.postInvitationToAllUsers)
   app.post('/admin/event', authentication, RouteHandlers.postEventRouteHandler)
   app.post('/admin/remind', authentication, RouteHandlers.remindRouteHandler)
+  app.post('/admin/joinParticipants', authentication, RouteHandlers.joinParticipantsHandler)
   app.post('/respond', RouteHandlers.respondRouteHandler)
   app.get('*', CommonRoutes.route404)
 
