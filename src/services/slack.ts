@@ -1,4 +1,4 @@
-import { ChannelsCreateArguments, ConversationsCreateArguments, ConversationsOpenArguments, WebAPICallResult, WebClient } from '@slack/web-api'
+import { ConversationsOpenArguments, WebAPICallResult, WebClient } from '@slack/web-api'
 
 import { User } from '../models/user.models'
 
@@ -76,7 +76,7 @@ export const createConversation = async (options: CreateDMGroupOptions): Promise
 
   const conversationOptions: ConversationsOpenArguments = { users: userIds.join(',') }
 
-  const conversation: WebAPICallResult & { channel?: { id: string } } = await slack.conversations.open(conversationOptions)
+  const conversation: any = await slack.conversations.open(conversationOptions)
 
   const { channel } = conversation
   return channel?.id || null
